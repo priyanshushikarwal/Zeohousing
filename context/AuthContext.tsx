@@ -60,9 +60,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
     };
 
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-[#050510] flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
+                    <p className="text-purple-400 font-mono animate-pulse">Initializing System...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <AuthContext.Provider value={{ user, loading, signInWithGoogle, logout }}>
-            {!loading && children}
+            {children}
         </AuthContext.Provider>
     );
 };
