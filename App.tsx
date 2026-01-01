@@ -11,7 +11,12 @@ import GlassCard from './components/GlassCard';
 
 import InviteModal from './components/InviteModal';
 
+import { useAuth } from './context/AuthContext';
+
+import Dashboard from './components/Dashboard';
+
 const App: React.FC = () => {
+  const { user, signInWithGoogle } = useAuth();
   const [isInviteModalOpen, setIsInviteModalOpen] = React.useState(false);
 
   useEffect(() => {
@@ -30,6 +35,10 @@ const App: React.FC = () => {
   }, []);
 
   const handleOpenInvite = () => setIsInviteModalOpen(true);
+
+  if (user) {
+    return <Dashboard />;
+  }
 
   return (
     <div className="min-h-screen bg-[#050510] selection:bg-purple-500 selection:text-white">
@@ -116,9 +125,15 @@ const App: React.FC = () => {
               <p className="text-gray-400 text-xl max-w-2xl mx-auto mb-12">
                 Join 10,000+ developers who have already taken the leap into premium Webflow mastery.
               </p>
-              <button onClick={handleOpenInvite} className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(168,85,247,0.5)]">
-                Get Started Today
-              </button>
+              {!user ? (
+                <button onClick={signInWithGoogle} className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+                  Get Started Today
+                </button>
+              ) : (
+                <button className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+                  Go to Dashboard
+                </button>
+              )}
             </div>
           </div>
         </section>

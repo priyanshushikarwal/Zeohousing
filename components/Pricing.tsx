@@ -3,11 +3,14 @@ import { Check, ShieldCheck } from 'lucide-react';
 import GlassCard from './GlassCard';
 import { PRICING_PLANS, PAYMENT_METHODS } from '../constants';
 
+import { useAuth } from '../context/AuthContext';
+
 interface PricingProps {
   onRequestInvite: () => void;
 }
 
 const Pricing: React.FC<PricingProps> = ({ onRequestInvite }) => {
+  const { user, signInWithGoogle } = useAuth();
   return (
     <section id="pricing" className="py-24 relative overflow-hidden">
       {/* Background radial glow */}
@@ -53,14 +56,24 @@ const Pricing: React.FC<PricingProps> = ({ onRequestInvite }) => {
                 ))}
               </div>
 
-              <button
-                onClick={onRequestInvite}
-                className={`w-full py-4 rounded-xl font-bold transition-all ${plan.highlighted
-                  ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
-                  : 'glass text-gray-300 hover:text-white hover:bg-white/10'
-                  }`}>
-                Request Invite
-              </button>
+              {!user ? (
+                <button
+                  onClick={signInWithGoogle}
+                  className={`w-full py-4 rounded-xl font-bold transition-all ${plan.highlighted
+                    ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
+                    : 'glass text-gray-300 hover:text-white hover:bg-white/10'
+                    }`}>
+                  Get Started
+                </button>
+              ) : (
+                <button
+                  className={`w-full py-4 rounded-xl font-bold transition-all ${plan.highlighted
+                    ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]'
+                    : 'glass text-gray-300 hover:text-white hover:bg-white/10'
+                    }`}>
+                  Select Plan
+                </button>
+              )}
             </GlassCard>
           ))}
         </div>

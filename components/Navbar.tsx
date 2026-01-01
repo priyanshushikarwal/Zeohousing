@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
+import { useAuth } from '../context/AuthContext';
+
 interface NavbarProps {
   onRequestInvite: () => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ onRequestInvite }) => {
+  const { user, signInWithGoogle, logout } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -39,10 +42,20 @@ const Navbar: React.FC<NavbarProps> = ({ onRequestInvite }) => {
 
         {/* CTAs */}
         <div className="hidden md:flex items-center gap-4">
-          <button onClick={onRequestInvite} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Login</button>
-          <button onClick={onRequestInvite} className="px-5 py-2 rounded-full border border-purple-500/50 text-purple-400 text-sm font-semibold hover:bg-purple-500/10 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all">
-            Request Invite
-          </button>
+          {!user ? (
+            <>
+              <button onClick={signInWithGoogle} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Login</button>
+              <button onClick={onRequestInvite} className="px-5 py-2 rounded-full border border-purple-500/50 text-purple-400 text-sm font-semibold hover:bg-purple-500/10 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all">
+                Request Invite
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-4">
+              <span className="text-white text-sm">{user.displayName}</span>
+              <button onClick={logout} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Logout</button>
+              <img src={user.photoURL || ''} alt="User" className="w-8 h-8 rounded-full border border-purple-500" />
+            </div>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -57,9 +70,27 @@ const Navbar: React.FC<NavbarProps> = ({ onRequestInvite }) => {
           <a href="#about" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-gray-300">About</a>
           <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-gray-300">Tutorials</a>
           <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-gray-300">Pricing</a>
-          <button onClick={() => { setMobileMenuOpen(false); onRequestInvite(); }} className="w-full py-3 rounded-xl glass border-purple-500/50 text-purple-400 font-bold">
-            Request Invite
-          </button>
+
+          {!user ? (
+            <>
+              <button onClick={() => { setMobileMenuOpen(false); signInWithGoogle(); }} className="w-full py-3 rounded-xl glass border-purple-500/50 text-purple-400 font-bold">
+                Login
+              </button>
+              <button onClick={() => { setMobileMenuOpen(false); onRequestInvite(); }} className="w-full py-3 rounded-xl glass border-purple-500/50 text-purple-400 font-bold">
+                Request Invite
+              </button>
+            </>
+          ) : (
+            <div className="flex flex-col items-center gap-4">
+              <div className="flex items-center gap-2">
+                <img src={user.photoURL || ''} alt="User" className="w-8 h-8 rounded-full border border-purple-500" />
+                <span className="text-gray-300">{user.displayName}</span>
+              </div>
+              <button onClick={() => { setMobileMenuOpen(false); logout(); }} className="w-full py-3 rounded-xl glass border-red-500/50 text-red-400 font-bold">
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       )}
     </nav>
