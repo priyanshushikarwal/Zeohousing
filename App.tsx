@@ -9,7 +9,11 @@ import FAQ from './components/FAQ';
 import Footer from './components/Footer';
 import GlassCard from './components/GlassCard';
 
+import InviteModal from './components/InviteModal';
+
 const App: React.FC = () => {
+  const [isInviteModalOpen, setIsInviteModalOpen] = React.useState(false);
+
   useEffect(() => {
     // Basic implementation of smooth scroll for all anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -25,12 +29,14 @@ const App: React.FC = () => {
     });
   }, []);
 
+  const handleOpenInvite = () => setIsInviteModalOpen(true);
+
   return (
     <div className="min-h-screen bg-[#050510] selection:bg-purple-500 selection:text-white">
-      <Navbar />
+      <Navbar onRequestInvite={handleOpenInvite} />
 
       <main>
-        <Hero />
+        <Hero onRequestInvite={handleOpenInvite} />
 
         {/* Social Proof Stats */}
         <section className="py-12 relative overflow-hidden">
@@ -95,7 +101,7 @@ const App: React.FC = () => {
         </section>
 
         <Features />
-        <Pricing />
+        <Pricing onRequestInvite={handleOpenInvite} />
         <Testimonials />
         <FAQ />
 
@@ -110,7 +116,7 @@ const App: React.FC = () => {
               <p className="text-gray-400 text-xl max-w-2xl mx-auto mb-12">
                 Join 10,000+ developers who have already taken the leap into premium Webflow mastery.
               </p>
-              <button className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(168,85,247,0.5)]">
+              <button onClick={handleOpenInvite} className="px-12 py-5 bg-purple-600 hover:bg-purple-500 text-white rounded-2xl font-black text-lg transition-all shadow-[0_0_30px_rgba(168,85,247,0.5)]">
                 Get Started Today
               </button>
             </div>
@@ -119,6 +125,7 @@ const App: React.FC = () => {
       </main>
 
       <Footer />
+      <InviteModal isOpen={isInviteModalOpen} onClose={() => setIsInviteModalOpen(false)} />
     </div>
   );
 };

@@ -2,7 +2,11 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+  onRequestInvite: () => void;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ onRequestInvite }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -35,9 +39,9 @@ const Navbar: React.FC = () => {
 
         {/* CTAs */}
         <div className="hidden md:flex items-center gap-4">
-          <button className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Login</button>
-          <button className="px-5 py-2 rounded-full border border-purple-500/50 text-purple-400 text-sm font-semibold hover:bg-purple-500/10 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all">
-            Get Access
+          <button onClick={onRequestInvite} className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Login</button>
+          <button onClick={onRequestInvite} className="px-5 py-2 rounded-full border border-purple-500/50 text-purple-400 text-sm font-semibold hover:bg-purple-500/10 hover:shadow-[0_0_20px_rgba(168,85,247,0.3)] transition-all">
+            Request Invite
           </button>
         </div>
 
@@ -53,8 +57,8 @@ const Navbar: React.FC = () => {
           <a href="#about" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-gray-300">About</a>
           <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-gray-300">Tutorials</a>
           <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-lg font-medium text-gray-300">Pricing</a>
-          <button className="w-full py-3 rounded-xl glass border-purple-500/50 text-purple-400 font-bold">
-            Get Access
+          <button onClick={() => { setMobileMenuOpen(false); onRequestInvite(); }} className="w-full py-3 rounded-xl glass border-purple-500/50 text-purple-400 font-bold">
+            Request Invite
           </button>
         </div>
       )}

@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ArrowRight, Play } from 'lucide-react';
 import GlassCard from './GlassCard';
 
-const Hero: React.FC = () => {
+interface HeroProps {
+  onRequestInvite: () => void;
+}
+
+const Hero: React.FC<HeroProps> = ({ onRequestInvite }) => {
   const [textCount, setTextCount] = useState(0);
   const p1 = "WEBFLOW ";
   const p2 = "ZEOHOUSING";
@@ -47,8 +51,8 @@ const Hero: React.FC = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center justify-center gap-2 group">
-              Become a Webflow Pro
+            <button onClick={onRequestInvite} className="px-8 py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold transition-all shadow-[0_0_20px_rgba(168,85,247,0.4)] flex items-center justify-center gap-2 group">
+              Request Invite
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
             <button className="px-8 py-4 glass text-white rounded-xl font-bold transition-all hover:bg-white/10 flex items-center justify-center gap-2">
