@@ -21,6 +21,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!auth) {
+            setLoading(false);
+            return;
+        }
+
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             setLoading(false);
@@ -28,6 +33,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
         return () => unsubscribe();
     }, []);
+
+    if (!auth) {
+        return (
+            <div className="min-h-screen bg-[#050510] flex items-center justify-center p-4">
+                <div className="max-w-md text-center space-y-4">
+                    <h1 className="text-2xl font-bold text-red-500">Configuration Error</h1>
+                    <p className="text-gray-400">
+                        Firebase has not been initialized correctly.
+                    </p>
+                    <div className="bg-red-500/10 border border-red-500/20 p-4 rounded text-left text-sm text-red-300 font-mono">
+                        <p>Missing Environment Variables.</p>
+                        <p className="mt-2 text-xs text-gray-500">
+                            If you are on Vercel, please add your Firebase keys in Settings &gt; Environment Variables.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const signInWithGoogle = async () => {
         console.log("Initiating Google Sign In...");

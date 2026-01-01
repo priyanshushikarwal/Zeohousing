@@ -15,6 +15,19 @@ console.log("Firebase Config:", {
     apiKey: firebaseConfig.apiKey ? "PRESENT" : "MISSING",
 });
 
-const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
+let app;
+let auth: any;
+let googleProvider: any;
+
+try {
+    if (!firebaseConfig.apiKey) {
+        throw new Error("Missing Firebase API Key");
+    }
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
+} catch (error) {
+    console.error("Firebase Initialization Error:", error);
+}
+
+export { auth, googleProvider };
